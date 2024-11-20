@@ -3,14 +3,15 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 
 import SingleCard from './components/SingleCard';
+import matchers from '@testing-library/jest-dom/matchers';
 
 const cardImages = [
-  { src: '/img/helmet-1.png' },
-  { src: '/img/potion-1.png' },
-  { src: '/img/ring-1.png' },
-  { src: '/img/scroll-1.png' },
-  { src: '/img/shield-1.png' },
-  { src: '/img/sword-1.png' },
+  { src: '/img/helmet-1.png', matched: false },
+  { src: '/img/potion-1.png', matched: false },
+  { src: '/img/ring-1.png', matched: false },
+  { src: '/img/scroll-1.png', matched: false },
+  { src: '/img/shield-1.png', matched: false },
+  { src: '/img/sword-1.png', matched: false },
 ];
 
 export default function App() {
@@ -37,14 +38,22 @@ export default function App() {
   useEffect(() => {
     if (choiceOne && choiceTwo) {
       if (choiceOne.src === choiceTwo.src) {
-        console.log('those cards match');
+        setCards((prevCards) => {
+          return prevCards.map((card) => {
+            if (card.src === choiceOne.src) {
+              return { ...card, matched: true };
+            } else {
+              return card;
+            }
+          });
+        });
         resetChoice();
       } else {
-        console.log('those cards do not mtches');
         resetChoice();
       }
     }
   }, [choiceOne, choiceTwo]);
+  console.log(cards);
 
   //reset choices and increase turn
   const resetChoice = () => {
