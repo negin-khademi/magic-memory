@@ -1,6 +1,6 @@
 import './App.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import SingleCard from './components/SingleCard';
 
@@ -17,8 +17,9 @@ export default function App() {
   const [cards, setCards] = useState([]);
   const [turns, setTurns] = useState(0);
   const [choiceOne, setChoiceOne] = useState(null);
-  const [choiseTwo, setChoiseTwo] = useState(null);
+  const [choiceTwo, setChoiceTwo] = useState(null);
 
+  //shuffle cards
   const shuffleCards = () => {
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
@@ -28,8 +29,28 @@ export default function App() {
     setTurns(0);
   };
 
+  //handle a choice
   const handleChoise = (card) => {
-    choiceOne ? setChoiseTwo(card) : setChoiceOne(card);
+    choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+  };
+
+  useEffect(() => {
+    if (choiceOne && choiceTwo) {
+      if (choiceOne.src === choiceTwo.src) {
+        console.log('those cards match');
+        resetChoice();
+      } else {
+        console.log('those cards do not mtches');
+        resetChoice();
+      }
+    }
+  }, [choiceOne, choiceTwo]);
+
+  //reset choices and increase turn
+  const resetChoice = () => {
+    setChoiceOne(null);
+    setChoiceTwo(null);
+    setTurns((prevTurns) => prevTurns + 1);
   };
 
   return (
