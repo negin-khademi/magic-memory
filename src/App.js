@@ -3,7 +3,6 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 
 import SingleCard from './components/SingleCard';
-import matchers from '@testing-library/jest-dom/matchers';
 
 const cardImages = [
   { src: '/img/helmet-1.png', matched: false },
@@ -31,7 +30,7 @@ export default function App() {
   };
 
   //handle a choice
-  const handleChoise = (card) => {
+  const handleChoice = (card) => {
     choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
   };
 
@@ -49,7 +48,7 @@ export default function App() {
         });
         resetChoice();
       } else {
-        resetChoice();
+        setTimeout(() => resetChoice(), 1000);
       }
     }
   }, [choiceOne, choiceTwo]);
@@ -69,7 +68,12 @@ export default function App() {
 
       <div className="card-grid">
         {cards.map((card) => (
-          <SingleCard key={card.id} card={card} handleChoise={handleChoise} />
+          <SingleCard
+            key={card.id}
+            card={card}
+            handleChoice={handleChoice}
+            flipped={card === choiceOne || card === choiceTwo || card.matched}
+          />
         ))}
       </div>
     </div>
